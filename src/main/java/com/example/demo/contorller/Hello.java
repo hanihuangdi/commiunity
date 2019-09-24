@@ -10,14 +10,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class Hello {
     @GetMapping("/hello")
-    public String hello(@RequestParam(name="name",required=false,defaultValue = "word")String name, ModelAndView mv){
-        mv.addObject("name",name);
+    public String hello(@RequestParam(name="name",required=false,defaultValue = "word")String name, Model mv){
+        mv.addAttribute("name",name);
         return "hello";
 
     }
-    @RequestMapping("/user")
-    public String list(@RequestParam(name="name",required = false,defaultValue = "world")String name, Model model) {
-        model.addAttribute("name", name);
-        return "hello";
+    @GetMapping("/")
+    public String index(){
+       return "index";
     }
 }
