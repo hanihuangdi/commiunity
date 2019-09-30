@@ -5,4 +5,7 @@
 [Springboot-web](http://spring.io/guides/gs/serving-web-content/ )      
 [OKHTTP](https://square.github.io/okhttp/)          
 [github授权应用](https://developer.github.com/apps/building-oauth-apps/authorizing-oauth-apps/)     
-[Flyway管理数据库文件](https://flywaydb.org/getstarted/firststeps/maven#integrating-flyway)
+[Flyway管理数据库文件](https://flywaydb.org/getstarted/firststeps/maven#integrating-flyway)        
+[Lonbok优化开发getAndset](https://projectlombok.org/)
+[thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
+[fastjson json数据类型转换](https://www.w3cschool.cn/fastjson/%20)

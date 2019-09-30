@@ -1,7 +1,11 @@
 package com.example.demo.contorller;
 
+import com.example.demo.dto.PageBean;
+import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.Usermapper;
+import com.example.demo.model.Question;
 import com.example.demo.model.User;
+import com.example.demo.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
@@ -13,20 +17,28 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class Hello {
+    @Autowired
+    PageService service;
+    @Autowired
+    QuestionMapper questionMapper;
     @Autowired
     Usermapper usermapper;
     @GetMapping("/hello")
     public String hello(@RequestParam(name="name",required=false,defaultValue = "word")String name, Model mv){
         mv.addAttribute("name",name);
+
         return "hello";
 
     }
     @GetMapping("/")
-    public String index(HttpServletRequest req){
+    public String index(HttpServletRequest req,Model md,@RequestParam(name="currentPage",defaultValue = "1")int currentPage,
+                        @RequestParam(name="size",defaultValue ="3")int size){
         Cookie[] cookies = req.getCookies();
+        if(cookies!=null){
         for(Cookie ele:cookies){
         if("token".equals(ele.getName())){
         String token = ele.getValue();
@@ -37,6 +49,11 @@ public class Hello {
             break;
            }
         }
+        }
+        PageBean pageBean;
+        pageBean = service.findPage(currentPage,size);
+        md.addAttribute("pageBean",pageBean);
         return "index";
+
     }
 }
