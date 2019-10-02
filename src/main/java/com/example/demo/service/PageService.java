@@ -14,7 +14,8 @@ public class PageService {
     @Autowired
     QuestionMapper questionMapper;
 
-    public PageBean findPage(int currentPage, int size) {
+    public PageBean findPage(int currentPage, int size,Integer creator) {
+
         PageBean pageBean = new PageBean();
         int account;
         int totalPage;
@@ -23,11 +24,26 @@ public class PageService {
         int endPage=0;
         pageBean.setCurrentPage(currentPage);
         pageBean.setSize(size);
+       star=(currentPage-1)*size;
+        List<Question> questions;
+        if(creator==null){
+        questions = questionMapper.findPage(star,size);
         account=questionMapper.account();
+        }
+        else {
+         questions = questionMapper.findIdPage(star,size,creator);
+            account=questionMapper.accountById(creator);
+        }
+        pageBean.setCount(account);
         totalPage=account%size==0?account/size:(account/size)+1;
+        //防止越界
+        if(currentPage>totalPage){
+            currentPage=totalPage;
+        }
+        if(currentPage<1){
+            currentPage=1;
+        }
         pageBean.setTotalPage(totalPage);
-        star=(currentPage-1)*size;
-        List<Question> questions = questionMapper.findPage(star,size);
         pageBean.setQuestions(questions);
         //判断是否展示首页上一下末页下一页
         if(currentPage==1){
@@ -81,6 +97,12 @@ public class PageService {
             }
 
         }
+       if(totalPage==1){
+           pageBean.setFistPage(false);
+           pageBean.setNextPage(false);
+           pageBean.setNextPage(false);
+           pageBean.setLastPage(false);
+       }
        //设置分页展示的页面集合
        List<Integer> list = new ArrayList<Integer>();
        for(int i=starPage;i<=endPage;i++){
@@ -89,4 +111,9 @@ public class PageService {
        pageBean.setList(list);
         return pageBean;
     }
-}
+    public PageBean findPage(int currentPage, int size) {
+      return   findPage(currentPage,size,null);
+
+    }
+
+    }

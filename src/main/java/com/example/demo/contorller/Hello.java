@@ -3,21 +3,16 @@ package com.example.demo.contorller;
 import com.example.demo.dto.PageBean;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.Usermapper;
-import com.example.demo.model.Question;
 import com.example.demo.model.User;
 import com.example.demo.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 public class Hello {
@@ -36,7 +31,7 @@ public class Hello {
     }
     @GetMapping("/")
     public String index(HttpServletRequest req,Model md,@RequestParam(name="currentPage",defaultValue = "1")int currentPage,
-                        @RequestParam(name="size",defaultValue ="3")int size){
+                        @RequestParam(name="size",defaultValue ="5")int size){
         Cookie[] cookies = req.getCookies();
         if(cookies!=null){
         for(Cookie ele:cookies){

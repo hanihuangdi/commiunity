@@ -14,6 +14,7 @@ public class PageBean {
     boolean nextPage;
     boolean fistPage;
     boolean lastPage;
+    int count;
     List<Integer> list;
     List<Question> questions;
 }

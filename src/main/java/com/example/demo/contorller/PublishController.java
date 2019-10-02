@@ -44,6 +44,8 @@ public class PublishController {
                 if(user==null){
                     md.addAttribute("msg","您尚未登录，请"+"登录后重试");
                     return "publish";
+                }else{
+                    req.getSession().setAttribute("user",user);
                 }
                 break;
             }
