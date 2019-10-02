@@ -23,20 +23,21 @@ public class ProfileController {
     @GetMapping("/profile/{action}")
     public String profile(HttpServletRequest req, Model md, @RequestParam(name="currentPage",defaultValue = "1")int currentPage,
                           @RequestParam(name="size",defaultValue ="5")int size, @PathVariable(name="action")String action){
-        Cookie[] cookies = req.getCookies();
-        User user=null;
-        if(cookies!=null){
-            for(Cookie ele:cookies){
-                if("token".equals(ele.getName())){
-                    String token = ele.getValue();
-                    user = usermapper.findByToken(token);
-                    if(user!=null){
-                        req.getSession().setAttribute("user",user);
-                    }
-                    break;
-                }
-            }
-        }
+//        Cookie[] cookies = req.getCookies();
+//        User user=null;
+//        if(cookies!=null){
+//            for(Cookie ele:cookies){
+//                if("token".equals(ele.getName())){
+//                    String token = ele.getValue();
+//                    user = usermapper.findByToken(token);
+//                    if(user!=null){
+//                        req.getSession().setAttribute("user",user);
+//                    }
+//                    break;
+//                }
+//            }
+//        }
+        User user = (User)req.getSession().getAttribute("user");
         PageBean pageBean;
         pageBean = service.findPage(currentPage,size,user.getId());
         md.addAttribute("pageBean",pageBean);

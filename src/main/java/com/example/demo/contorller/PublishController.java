@@ -34,28 +34,36 @@ public class PublishController {
         md.addAttribute("tag",tag);
 
         //登录验证
-        User user =null;
-        Cookie[] cookies = req.getCookies();
-        if(cookies!=null){
-        for(Cookie ele:cookies){
-            if("token".equals(ele.getName())){
-                String token = ele.getValue();
-                user = usermapper.findByToken(token);
-                if(user==null){
-                    md.addAttribute("msg","您尚未登录，请"+"登录后重试");
-                    return "publish";
-                }else{
-                    req.getSession().setAttribute("user",user);
-                }
-                break;
-            }
-        }
-        }
-        else{
-            md.addAttribute("msg","您尚未登录，请"+"登录后重试");
-            return "publish";
-        }
 
+        Cookie[] cookies = req.getCookies();
+//        User user =null;
+//        if(cookies!=null){
+//        for(Cookie ele:cookies){
+//            if("token".equals(ele.getName())){
+//                String token = ele.getValue();
+//                user = usermapper.findByToken(token);
+//                if(user==null){
+//                    md.addAttribute("msg","您尚未登录，请"+"登录后重试");
+//                    return "publish";
+//                }else{
+//                    req.getSession().setAttribute("user",user);
+//                }
+//                break;
+//            }
+//        }
+//        }
+//        else{
+//            md.addAttribute("msg","您尚未登录，请"+"登录后重试");
+//            return "publish";
+//        }
+        if(cookies==null){
+            md.addAttribute("msg","您尚未登录，请"+"登录后重试");
+//            return "publish";
+        }
+        User user = (User) req.getSession().getAttribute("user");
+        if(user==null){
+            return "redirect:/";
+        }
         //表单验证
         if(title==null||"".equals(title.trim())){
             md.addAttribute("msg","请输入标题");
