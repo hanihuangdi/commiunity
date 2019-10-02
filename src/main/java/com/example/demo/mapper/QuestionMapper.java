@@ -61,4 +61,19 @@ public interface QuestionMapper {
 
     })
     List<Question> findIdPage(@Param("star") int star, @Param("size")int size, @Param("creator") Integer creator);
+    @Select("select * from question where id=#{id}")
+    @Results({@Result(id=true,property ="id",column = "id"),
+            @Result(property ="title",column = "title"),
+            @Result(property ="description",column = "description"),
+            @Result(property ="gmt_create",column = "gmt_create"),
+            @Result(property ="gmt_modify",column = "gmt_modify"),
+            @Result(property ="creator",column = "creator"),
+            @Result(property ="comment_count",column = "comment_count"),
+            @Result(property ="view_count",column = "view_count"),
+            @Result(property ="like_count",column = "like_count"),
+            @Result(property ="tag",column = "tag"),
+            @Result(property ="user",column = "creator",javaType = User.class,one=@One(select="com.example.demo.mapper.Usermapper.findById"))
+
+    })
+    Question findById(int id);
 }

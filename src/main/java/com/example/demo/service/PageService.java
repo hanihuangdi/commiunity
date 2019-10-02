@@ -116,4 +116,8 @@ public class PageService {
 
     }
 
+    public Question findById(int id) {
+        Question question = questionMapper.findById(id);
+        return question;
     }
+}
