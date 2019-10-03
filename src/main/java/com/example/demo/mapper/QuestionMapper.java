@@ -76,4 +76,7 @@ public interface QuestionMapper {
 
     })
     Question findById(int id);
+    //title,description,creator,gmt_create,gmt_modify,tag
+    @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modify=#{gmt_modify} where id=#{id}")
+   void update(Question question);
 }

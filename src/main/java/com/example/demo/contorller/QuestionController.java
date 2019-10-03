@@ -22,7 +22,6 @@ public class QuestionController {
 
             md.addAttribute("question",question);
         }
-        User user = new User();
         return "question";
     }
 }

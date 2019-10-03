@@ -5,6 +5,7 @@ import com.example.demo.dto.GithubUser;
 import com.example.demo.mapper.Usermapper;
 import com.example.demo.model.User;
 import com.example.demo.provider.GithubProvider;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,8 @@ public class AuthorizeController {
     @Value("${git.client.uri}")
     String Redirect_uri;
     @Autowired
+    UserService userService;
+    @Autowired
     Usermapper usermapper;
     @RequestMapping("/callback")
     public String Authorize(@RequestParam(name="code") String code, @RequestParam(name="state") String state, HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -49,7 +52,7 @@ public class AuthorizeController {
             user.setGmtCreat(System.currentTimeMillis());
             user.setGmtModify(user.getGmtCreat());
             user.setAvatar_url(githubUser.getAvatar_url());
-            usermapper.insert(user);
+            userService.saveUser(user);
             Cookie cookie = new Cookie("token",token);
             resp.addCookie(cookie);
             //req.getSession().setAttribute("githubUser",githubUser);

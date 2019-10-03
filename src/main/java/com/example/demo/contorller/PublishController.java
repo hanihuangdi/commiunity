@@ -4,6 +4,7 @@ import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.Usermapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
+import com.example.demo.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,20 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class PublishController {
     @Autowired
+    QuestionService questionService;
+    @Autowired
     Usermapper usermapper;
     @Autowired
     QuestionMapper questionMapper;
+    @GetMapping("edit/{id}")
+    public String edit(@PathVariable(name="id")int id,Model md){
+        Question question = questionMapper.findById(id);
+        md.addAttribute("title",question.getTitle());
+        md.addAttribute("description",question.getDescription());
+        md.addAttribute("tag",question.getTag());
+        md.addAttribute("id",question.getId());
+    return "publish";
+    }
     @GetMapping("/publish")
     public String publish(){
         return "publish";
@@ -27,11 +39,14 @@ public class PublishController {
     public String question(@RequestParam(name="title",required=false)String title,
                            @RequestParam(name="description",required=false)String description,
                            @RequestParam(name="tag",required=false)String tag,
-                           Model md, HttpServletRequest req, HttpServletResponse resp
+                           @RequestParam(name="id",required=false,defaultValue = "-1")int  id,
+                           Model md, HttpServletRequest req
                            ){
+        //会写数据
         md.addAttribute("title",title);
         md.addAttribute("description",description);
         md.addAttribute("tag",tag);
+        md.addAttribute("id",id);
 
         //登录验证
 
@@ -77,14 +92,23 @@ public class PublishController {
             md.addAttribute("msg","请输入标签");
           return "publish";
         }
-        Question question = new Question();
+        Question question=questionMapper.findById(id);
+        if(question!=null){
+            question.setTitle(title);
+            question.setDescription(description);
+            question.setTag(tag);
+            question.setGmt_modify(System.currentTimeMillis());
+            questionService.update(question);
+        }else{
+        question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
         question.setGmt_create(System.currentTimeMillis());
         question.setGmt_modify(question.getGmt_create());
         question.setCreator(user.getId());
-        questionMapper.insert(question);
+        questionService.insert(question);
+        }
         return "redirect:/";
     }
 
