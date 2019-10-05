@@ -1,8 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.PageBean;
+import com.example.demo.dto.QuestionDTO;
 import com.example.demo.mapper.QuestionMapper;
+import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
+import com.example.demo.model.QuestionExample;
+import com.example.demo.model.User;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +18,8 @@ import java.util.List;
 public class PageService {
     @Autowired
     QuestionMapper questionMapper;
-
+    @Autowired
+    UserMapper userMapper;
     public PageBean findPage(int currentPage, int size,Integer creator) {
 
         PageBean pageBean = new PageBean();
@@ -26,13 +32,18 @@ public class PageService {
         pageBean.setSize(size);
        star=(currentPage-1)*size;
         List<Question> questions;
+
+        User user=null;
+        List<QuestionDTO> questionDTOList=new ArrayList<QuestionDTO>();
         if(creator==null){
-        questions = questionMapper.findPage(star,size);
-        account=questionMapper.account();
+         questions =   questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(star,size));
+        account= (int) questionMapper.countByExample(new QuestionExample());
         }
         else {
-         questions = questionMapper.findIdPage(star,size,creator);
-            account=questionMapper.accountById(creator);
+            QuestionExample example = new QuestionExample();
+            example.createCriteria().andCreatorEqualTo(creator);
+            questions =   questionMapper.selectByExampleWithRowbounds(example,new RowBounds(star,size));
+            account=(int) questionMapper.countByExample(example);
         }
         pageBean.setCount(account);
         totalPage=account%size==0?account/size:(account/size)+1;
@@ -44,7 +55,15 @@ public class PageService {
             currentPage=1;
         }
         pageBean.setTotalPage(totalPage);
-        pageBean.setQuestions(questions);
+        //questionDTO 赋值
+        for(Question queston:questions){
+           user = userMapper.selectByPrimaryKey(queston.getCreator());
+           QuestionDTO questionDTO = new QuestionDTO();
+           questionDTO.setQuestion(queston);
+           questionDTO.setUser(user);
+            questionDTOList.add(questionDTO);
+        }
+        pageBean.setQuestionDTOs(questionDTOList);
         //判断是否展示首页上一下末页下一页
         if(currentPage==1){
             pageBean.setFistPage(false);
@@ -116,8 +135,8 @@ public class PageService {
 
     }
 
-    public Question findById(int id) {
-        Question question = questionMapper.findById(id);
+    public Question findbyid(int id) {
+        Question question = questionMapper.selectByPrimaryKey(id);
         return question;
     }
 }

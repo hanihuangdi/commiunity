@@ -1,7 +1,6 @@
 package com.example.demo.contorller;
 
 import com.example.demo.dto.PageBean;
-import com.example.demo.mapper.Usermapper;
 import com.example.demo.model.User;
 import com.example.demo.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
     @Autowired
     PageService service;
-    @Autowired
-    Usermapper usermapper;
     @GetMapping("/profile/{action}")
     public String profile(HttpServletRequest req, Model md, @RequestParam(name="currentPage",defaultValue = "1")int currentPage,
                           @RequestParam(name="size",defaultValue ="5")int size, @PathVariable(name="action")String action){

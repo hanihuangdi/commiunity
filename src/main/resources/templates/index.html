@@ -19,18 +19,18 @@
         <div class="col-lg-9 col-md-12">
             <h2><div class="glyphicon glyphicon-th-list"></div><span>发现</span></h2>
             <hr/>
-            <div class="media" th:each="question:${pageBean.questions}">
+            <div class="media" th:each="questionDto:${pageBean.questionDTOs}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img_size" th:src="${question.user.avatar_url}" alt="头像">
+                        <img class="media-object img_size" th:src="${questionDto.user.avatarUrl}" alt="头像">
                     </a>
                 </div>
                 <div class="media-body">
-                    <a th:href="@{/question/{id}(id=${question.id})}"><h4 class="media-heading" th:text="${question.title}"></h4></a>
-                    <span th:text="${question.description}"></span><br/>
-                    <span class="text_desc"><span th:text="${question.comment_count}"></span>个回复，
-                        <span th:text="${question.view_count}"></span>个浏览数,
-                        <span th:text="${#dates.format(question.gmt_create,'yyyy-MM-dd hh:mm:ss')}"></span>
+                    <a th:href="@{/question/{id}(id=${questionDto.question.id})}"><h4 class="media-heading" th:text="${questionDto.question.title}"></h4></a>
+                    <span th:text="${questionDto.question.description}"></span><br/>
+                    <span class="text_desc"><span th:text="${questionDto.question.commentCount}"></span>个回复，
+                        <span th:text="${questionDto.question.viewCount}"></span>个浏览数,
+                        <span th:text="${#dates.format(questionDto.question.gmtCreate,'yyyy-MM-dd hh:mm:ss')}"></span>
                     </span>
                 </div>
             </div>

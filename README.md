@@ -10,3 +10,4 @@
 [Lonbok优化开发getAndset](https://projectlombok.org/)
 [thymeleaf](https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html)
 [fastjson json数据类型转换](https://www.w3cschool.cn/fastjson/%20)
+[generator 自动生成sql文件以及语句](http://mybatis.org/generator/running/runningWithMaven.html)

@@ -1,27 +1,18 @@
 package com.example.demo.contorller;
 
 import com.example.demo.dto.PageBean;
-import com.example.demo.mapper.QuestionMapper;
-import com.example.demo.mapper.Usermapper;
-import com.example.demo.model.User;
 import com.example.demo.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class Hello {
     @Autowired
     PageService service;
-    @Autowired
-    QuestionMapper questionMapper;
-    @Autowired
-    Usermapper usermapper;
     @GetMapping("/hello")
     public String hello(@RequestParam(name="name",required=false,defaultValue = "word")String name, Model mv){
         mv.addAttribute("name",name);

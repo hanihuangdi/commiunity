@@ -2,7 +2,6 @@ package com.example.demo.contorller;
 
 import com.example.demo.dto.AccessTokenDTO;
 import com.example.demo.dto.GithubUser;
-import com.example.demo.mapper.Usermapper;
 import com.example.demo.model.User;
 import com.example.demo.provider.GithubProvider;
 import com.example.demo.service.UserService;
@@ -31,8 +30,6 @@ public class AuthorizeController {
     String Redirect_uri;
     @Autowired
     UserService userService;
-    @Autowired
-    Usermapper usermapper;
     @RequestMapping("/callback")
     public String Authorize(@RequestParam(name="code") String code, @RequestParam(name="state") String state, HttpServletRequest req, HttpServletResponse resp) throws IOException {
         AccessTokenDTO accessTokenDTO =new AccessTokenDTO();
@@ -50,8 +47,8 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(githubUser.getId());
             user.setGmtCreat(System.currentTimeMillis());
-            user.setGmtModify(user.getGmtCreat());
-            user.setAvatar_url(githubUser.getAvatar_url());
+            user.setGtmModify(user.getGmtCreat());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userService.saveUser(user);
             Cookie cookie = new Cookie("token",token);
             resp.addCookie(cookie);

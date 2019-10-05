@@ -1,7 +1,6 @@
 package com.example.demo.contorller;
 
 import com.example.demo.mapper.QuestionMapper;
-import com.example.demo.mapper.Usermapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
 import com.example.demo.service.QuestionService;
@@ -12,19 +11,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class PublishController {
     @Autowired
     QuestionService questionService;
     @Autowired
-    Usermapper usermapper;
-    @Autowired
     QuestionMapper questionMapper;
     @GetMapping("edit/{id}")
     public String edit(@PathVariable(name="id")int id,Model md){
-        Question question = questionMapper.findById(id);
+
+       // Question question = questionMapper.findbyid(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
         md.addAttribute("title",question.getTitle());
         md.addAttribute("description",question.getDescription());
         md.addAttribute("tag",question.getTag());
@@ -92,21 +90,24 @@ public class PublishController {
             md.addAttribute("msg","请输入标签");
           return "publish";
         }
-        Question question=questionMapper.findById(id);
+        Question question=questionMapper.selectByPrimaryKey(id);
         if(question!=null){
             question.setTitle(title);
             question.setDescription(description);
             question.setTag(tag);
-            question.setGmt_modify(System.currentTimeMillis());
+            question.setGmtModify(System.currentTimeMillis());
             questionService.update(question);
         }else{
         question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setGmt_create(System.currentTimeMillis());
-        question.setGmt_modify(question.getGmt_create());
+        question.setGmtCreate(System.currentTimeMillis());
+        question.setGmtModify(question.getGmtCreate());
         question.setCreator(user.getId());
+        question.setLikeCount(0);
+        question.setViewCount(0);
+        question.setCommentCount(0);
         questionService.insert(question);
         }
         return "redirect:/";

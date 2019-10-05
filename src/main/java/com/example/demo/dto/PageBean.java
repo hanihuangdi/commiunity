@@ -16,5 +16,6 @@ public class PageBean {
     boolean lastPage;
     int count;
     List<Integer> list;
-    List<Question> questions;
+    List<QuestionDTO> questionDTOs;
+
 }
