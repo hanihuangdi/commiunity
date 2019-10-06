@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.dto.PageBean;
 import com.example.demo.dto.QuestionDTO;
+import com.example.demo.exception.CustomizeErroCode;
+import com.example.demo.exception.CustomizeException;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.Question;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -30,21 +33,25 @@ public class PageService {
         int endPage=0;
         pageBean.setCurrentPage(currentPage);
         pageBean.setSize(size);
-       star=(currentPage-1)*size;
+      // star=(currentPage-1)*size;
         List<Question> questions;
 
         User user=null;
         List<QuestionDTO> questionDTOList=new ArrayList<QuestionDTO>();
         if(creator==null){
-         questions =   questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(star,size));
-        account= (int) questionMapper.countByExample(new QuestionExample());
+            account= (int) questionMapper.countByExample(new QuestionExample());
+         questions =   questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(account-size*currentPage,size));
+
         }
         else {
             QuestionExample example = new QuestionExample();
             example.createCriteria().andCreatorEqualTo(creator);
-            questions =   questionMapper.selectByExampleWithRowbounds(example,new RowBounds(star,size));
             account=(int) questionMapper.countByExample(example);
+            questions =   questionMapper.selectByExampleWithRowbounds(example,new RowBounds(account-size*currentPage,size));
+
         }
+        //颠倒数组
+        Collections.reverse(questions);
         pageBean.setCount(account);
         totalPage=account%size==0?account/size:(account/size)+1;
         //防止越界
@@ -137,6 +144,9 @@ public class PageService {
 
     public Question findbyid(int id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question==null){
+            throw new CustomizeException(CustomizeErroCode.QUESTION_NOT_FOUND);
+        }
         return question;
     }
 }
