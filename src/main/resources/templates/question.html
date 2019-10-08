@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-lg-9 col-md-12">
             <h1 th:text="${questionDTO.question.title}"></h1>
-            <div class="author_text">作者：<span th:text="${questionDTO.user.name}"></span>|发布时间:<span th:text="${#dates.format(questionDTO.question.gmtCreate,'yyyy-MM-dd hh:mm:ss')}"> </span>|阅读数：<span th:text="${questionDTO.question.commentCount}"></span></div>
+            <div class="author_text">作者：<span th:text="${questionDTO.user.name}"></span>|发布时间:<span th:text="${#dates.format(questionDTO.question.gmtCreate,'yyyy-MM-dd hh:mm:ss')}"> </span>|阅读数：<span th:text="${questionDTO.question.viewCount}"></span></div>
             <hr/>
             <div th:text="${questionDTO.question.description}"></div>
             <hr/>

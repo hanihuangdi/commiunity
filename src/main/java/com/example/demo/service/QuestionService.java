@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.mapper.QuestionCustomMapper;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.QuestionExample;
@@ -10,7 +11,10 @@ import org.springframework.stereotype.Service;
 public class QuestionService {
     @Autowired
     QuestionMapper questionMapper;
-
+    @Autowired
+    PageService service;
+    @Autowired
+    QuestionCustomMapper questionCustomMapper;
     public void update(Question question) {
        // questionMapper.update(question);
 
@@ -19,7 +23,11 @@ public class QuestionService {
         questionMapper.updateByExample(question, example);
     }
 
+
     public void insert(Question question) {
         questionMapper.insert(question);
+    }
+    public void addView(Integer id){
+        questionCustomMapper.update(id);
     }
 }
