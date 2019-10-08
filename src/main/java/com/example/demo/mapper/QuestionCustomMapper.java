@@ -8,5 +8,6 @@ import org.apache.ibatis.session.RowBounds;
 import java.util.List;
 
 public interface QuestionCustomMapper {
-  void  update(Integer id);
+  void  update(Long id);
+  void updateComment(Long id);
 }

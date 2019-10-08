@@ -19,7 +19,7 @@ public class PublishController {
     @Autowired
     QuestionMapper questionMapper;
     @GetMapping("edit/{id}")
-    public String edit(@PathVariable(name="id")int id,Model md){
+    public String edit(@PathVariable(name="id")Long id,Model md){
 
        // Question question = questionMapper.findbyid(id);
         Question question = questionMapper.selectByPrimaryKey(id);
@@ -37,7 +37,7 @@ public class PublishController {
     public String question(@RequestParam(name="title",required=false)String title,
                            @RequestParam(name="description",required=false)String description,
                            @RequestParam(name="tag",required=false)String tag,
-                           @RequestParam(name="id",required=false,defaultValue = "-1")int  id,
+                           @RequestParam(name="id",required=false,defaultValue = "-1")Long  id,
                            Model md, HttpServletRequest req
                            ){
         //会写数据

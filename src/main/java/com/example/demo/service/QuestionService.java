@@ -25,9 +25,9 @@ public class QuestionService {
 
 
     public void insert(Question question) {
-        questionMapper.insert(question);
+        questionMapper.insertSelective(question);
     }
-    public void addView(Integer id){
+    public void addView(Long id){
         questionCustomMapper.update(id);
     }
 }

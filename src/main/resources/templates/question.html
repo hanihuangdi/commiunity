@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:javascript="http://www.w3.org/1999/xhtml">
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -8,6 +8,7 @@
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/comment.js"></script>
 
 
 </head>
@@ -17,18 +18,29 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12">
+            <div class="col-lg-12 col-md-12">
             <h1 th:text="${questionDTO.question.title}"></h1>
             <div class="author_text">作者：<span th:text="${questionDTO.user.name}"></span>|发布时间:<span th:text="${#dates.format(questionDTO.question.gmtCreate,'yyyy-MM-dd hh:mm:ss')}"> </span>|阅读数：<span th:text="${questionDTO.question.viewCount}"></span></div>
             <hr/>
             <div th:text="${questionDTO.question.description}"></div>
             <hr/>
             <span class="glyphicon glyphicon-pencil" th:if="${session.user!=null&&session.user.id==questionDTO.question.creator}"><a th:href="@{/edit/{id}(id=${questionDTO.question.id})}" > 编辑</a></span>
+            </div>
+            <div class="col-lg-12 col-md-12">
+                <hr/>
+                <input id="questionId" type="hidden" th:value="${questionDTO.question.id}">
+                <img class="media-object img_size img_comment" th:src="${questionDTO.user.avatarUrl}"/><span th:text="${questionDTO.user.name}"></span>
+                <textarea class="form-control" rows="3" id="comment_content"></textarea>
+                <button type="button" class="btn btn-success btn_comment" id="comment" style="display: none;" onclick="showTextarea()">回复</button>
+                <button type="button" class="btn btn-success btn_comment" onclick="post()" id="submit">提交</button>
+            </div>
         </div>
         <div class="col-lg-3 col-md-12">
             <h4>发起人</h4><br/>
             <a href="#">
                 <img class="media-object img_size img-circle" th:src="${questionDTO.user.avatarUrl}" alt="头像">
                 <span th:text="${questionDTO.user.name}"></span>
+
             </a>
         </div>
     </div>

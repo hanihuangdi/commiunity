@@ -12,6 +12,7 @@ import com.example.demo.model.User;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.util.resources.ga.LocaleNames_ga;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,7 +24,7 @@ public class PageService {
     QuestionMapper questionMapper;
     @Autowired
     UserMapper userMapper;
-    public PageBean findPage(int currentPage, int size,Integer creator) {
+    public PageBean findPage(int currentPage, int size, Long creator) {
 
         PageBean pageBean = new PageBean();
         int account;
@@ -142,7 +143,7 @@ public class PageService {
 
     }
 
-    public Question findbyid(int id) {
+    public Question findbyid(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question==null){
             throw new CustomizeException(CustomizeErroCode.QUESTION_NOT_FOUND);

@@ -23,7 +23,7 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name="id")int id, HttpServletRequest req, Model md){
+    public String question(@PathVariable(name="id")Long id, HttpServletRequest req, Model md){
         User user = new User();
         Question question = service.findbyid(id);
         questionService.addView(id);

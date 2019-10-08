@@ -16,14 +16,11 @@
             alert(1);
         });
         $("#regist").submit(function(){
-            alert($("#type").val());
             var data = {};
-
             data["parentId"] = $("#parentId").val();
             data["id"] = $("#id").val();
             data["content"] = $("#content").val();
             data["type"] = $("#type").val();
-
            $.ajax({
                url:"/comment",
                contentType: "application/json;charset=UTF-8",
