@@ -18,6 +18,7 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12">
+            <!--问题内容-->
             <div class="col-lg-12 col-md-12">
             <h1 th:text="${questionDTO.question.title}"></h1>
             <div class="author_text">作者：<span th:text="${questionDTO.user.name}"></span>|发布时间:<span th:text="${#dates.format(questionDTO.question.gmtCreate,'yyyy-MM-dd hh:mm:ss')}"> </span>|阅读数：<span th:text="${questionDTO.question.viewCount}"></span></div>
@@ -25,14 +26,55 @@
             <div th:text="${questionDTO.question.description}"></div>
             <hr/>
             <span class="glyphicon glyphicon-pencil" th:if="${session.user!=null&&session.user.id==questionDTO.question.creator}"><a th:href="@{/edit/{id}(id=${questionDTO.question.id})}" > 编辑</a></span>
+                <h3>回复数<span th:text="${questionDTO.question.commentCount}"></span></h3>
+            <hr style="margin:5px"/>
             </div>
+
+            <!--回复列表-->
+
+            <div class="col-lg-12 col-md-12" th:each="comment:${commentDTO}">
+
+                <img class="media-object img_size img_comment" th:src="${questionDTO.user.avatarUrl}"/>
+                <span th:text="${questionDTO.user.name}"></span>
+
+                <div>
+                    <p th:text="${comment.content}">这是回复内容</p>
+                    <span class="glyphicon glyphicon-thumbs-up community-tag"></span>
+                    <span class="glyphicon glyphicon-comment community-tag " th:data="${comment.id}" onclick="collapseComment(this)"></span>
+                    <span th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd hh:mm:ss')}" class="time_comment"> </span>
+                    <!--二级评论-->
+                    <div class="col-lg-12 col-md-12 collapse sub-comment" th:id="${'comment-'+comment.id}">
+                        <div class="col-lg-12 col-md-12" th:each="comment:${commentDTO}">
+                        <img class="media-object img_size img_comment" th:src="${questionDTO.user.avatarUrl}"/>
+                        <span th:text="${questionDTO.user.name}"></span>
+
+                        <div>
+                            <p th:text="${comment.content}">这是回复内容</p>
+                            <span th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd hh:mm:ss')}" class="time_comment"> </span>
+                        </div>
+                            <hr class="col-lg-12 col-md-12"/>
+                    </div>
+                        <!--二级回复-->
+                        <div class="col-lg-12 col-md-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="请评论..." th:id="'sub_comment'+${comment.id}">
+                                <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" onclick="post_subcomment(this)" th:data-sub_comment="${comment.id}">提交</button>
+                            </span>
+                            </div><!-- /input-group -->
+                        </div><!-- /.col-lg-6 -->
+                    </div>
+                    <hr/>
+                </div>
+            </div>
+            <!--回复框-->
             <div class="col-lg-12 col-md-12">
-                <hr/>
+
                 <input id="questionId" type="hidden" th:value="${questionDTO.question.id}">
                 <img class="media-object img_size img_comment" th:src="${questionDTO.user.avatarUrl}"/><span th:text="${questionDTO.user.name}"></span>
                 <textarea class="form-control" rows="3" id="comment_content"></textarea>
                 <button type="button" class="btn btn-success btn_comment" id="comment" style="display: none;" onclick="showTextarea()">回复</button>
-                <button type="button" class="btn btn-success btn_comment" onclick="post()" id="submit">提交</button>
+                <button type="button" class="btn btn-success btn_comment" onclick="post_comment()" id="submit">提交</button>
             </div>
         </div>
         <div class="col-lg-3 col-md-12">

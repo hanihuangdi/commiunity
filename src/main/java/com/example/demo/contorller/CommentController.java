@@ -2,20 +2,18 @@ package com.example.demo.contorller;
 
 import com.example.demo.dto.CommentDTO;
 import com.example.demo.dto.ResultDTO;
+import com.example.demo.enmus.CommentTypeEnum;
 import com.example.demo.exception.CustomizeErroCode;
-import com.example.demo.mapper.CommentMapper;
 import com.example.demo.model.Comment;
 import com.example.demo.model.User;
 import com.example.demo.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -28,6 +26,9 @@ public class CommentController {
         if(user==null){
           return ResultDTO.errOf(CustomizeErroCode.NOT_lOGIN);
         }
+        if(commentDTO==null||commentDTO.getContent()==null||commentDTO.getContent()==""){
+            return ResultDTO.errOf(CustomizeErroCode.COMMENT_NULL);
+        }
         Comment comment = new Comment();
         comment.setParentId(commentDTO.getParentId());
         comment.setContent(commentDTO.getContent());
@@ -37,5 +38,10 @@ public class CommentController {
         comment.setCommentator(user.getId());
         commentService.insert(comment);
         return ResultDTO.okOf();
+    }
+    @RequestMapping(value = "/comment/{id}",method = RequestMethod.GET)
+    public @ResponseBody Object subComment(@PathVariable(name="id")Long id){
+        List<CommentDTO> commentDTOS = commentService.findByIdComment(id, CommentTypeEnum.COMMENT.getType());
+        return ResultDTO.errOf(commentDTOS);
     }
 }

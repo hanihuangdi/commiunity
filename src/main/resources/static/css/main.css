@@ -28,8 +28,24 @@ body{
 .img_comment{
     width:50px;
     margin:10px;
+    margin-left: 0;
 }
 .btn_comment{
     float: right;
     margin-top:10px;
+}
+.time_comment{
+    float: right;
+}
+.community-tag:hover {
+    background-color: #499ef3;
+
+}
+.community-tag{
+    color:#9999;
+}
+.sub-comment{
+    border: 1px solid #e8e8e8;
+    padding:5px;
+
 }
