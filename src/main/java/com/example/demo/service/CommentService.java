@@ -4,10 +4,7 @@ import com.example.demo.dto.CommentDTO;
 import com.example.demo.enmus.CommentTypeEnum;
 import com.example.demo.exception.CustomizeErroCode;
 import com.example.demo.exception.CustomizeException;
-import com.example.demo.mapper.CommentMapper;
-import com.example.demo.mapper.QuestionCustomMapper;
-import com.example.demo.mapper.QuestionMapper;
-import com.example.demo.mapper.UserMapper;
+import com.example.demo.mapper.*;
 import com.example.demo.model.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,8 @@ public class CommentService {
     QuestionCustomMapper questionCustomMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CommentCustomMapper commentCustomMapper;
     @Transactional
     public void insert(Comment comment) {
         if(comment.getParentId()==null||comment.getParentId()==0){
@@ -46,6 +45,8 @@ public class CommentService {
            }
            else{
                commentMapper.insert(comment);
+               commentCustomMapper.updateCount(comment.getParentId());
+
            }
         }else{
             Question dbquestion = questionMapper.selectByPrimaryKey(comment.getParentId());
@@ -66,10 +67,10 @@ public class CommentService {
     public List<CommentDTO> findByIdComment(Long id, Integer type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id).andTypeEqualTo(type);
-        commentExample.setOrderByClause("gmt_create desc");
+        commentExample.setOrderByClause("gmt_create desc");//时间倒序排序
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         if(comments.size()==0){
-            return new ArrayList<>();
+           return new ArrayList<CommentDTO>();
         }
         /*去除用户ID*/
         Set<Long> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());

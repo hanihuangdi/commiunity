@@ -46,6 +46,9 @@ body{
 }
 .sub-comment{
     border: 1px solid #e8e8e8;
-    padding:5px;
+    padding: 20px 0;
 
+}
+.momment_tag{
+    margin-right:15px;
 }

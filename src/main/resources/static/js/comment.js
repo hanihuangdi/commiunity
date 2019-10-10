@@ -51,21 +51,50 @@
     }
     /*展开二级评论*/
     function collapseComment(e){
-        var data = e.getAttribute("data");
+        var commentId = e.getAttribute("data");
+        var comments = $("#comment-"+commentId);
         var collapse=e.getAttribute("data-collapse")
         if(collapse){
-            $("#comment-" + data).removeClass("in");
+            $("#comment-" + commentId).removeClass("in");
             e.removeAttribute("data-collapse");
 
         }else {
-            $("#comment-" + data).addClass("in");
+            $("#comment-" + commentId).addClass("in");
             e.setAttribute("data-collapse", "in");
-            alert(1);
             $.ajax({
-                url:"/comment/"+data,
+                url:"/comment/"+commentId,
                 type:"GET",
                 success:function(data){
-                    console.log(data)
+                    var newdata = $(data.data);
+                    console.log(newdata)
+                    if(data.code!=200){
+                        // alert(data.message);
+                    }else{
+                        var comments = $("#comment-"+commentId);
+                        if($(comments).children().length<2){
+                        $.each(newdata,function(index,comment){
+                            var div =$("<div/>",{"class":"col-lg-12 col-md-12"});
+                            var img = $("<img/>",{
+                                "class":"media-object img_size img_comment",
+                                "src":comment.user.avatarUrl
+                            });
+                            var spanName = $("<span/>",{
+                                "html":comment.user.name
+                            });
+                            var divIner = $("<div/>").append(
+                            $("<p/>",{"html":comment.content})).append(
+                                $("<span/>",{"class":"time_comment","html":moment(comment.gmtCreate).format('YYYY-MM-DD')}));
+
+                            var hr = $("<hr/>",{"class":"col-lg-12 col-md-12"});
+                            comments.prepend(div);
+                            div.append(img).append(spanName).append(divIner).append(hr);
+
+
+
+                        })
+                        }
+                    }
+
                 }
 
             });

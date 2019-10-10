@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URL;
+
 //通用的异常处理
 @ControllerAdvice
 public class CustomizeExceptionHandler {
@@ -20,8 +23,9 @@ public class CustomizeExceptionHandler {
     ModelAndView handleControllerException(HttpServletRequest request, Throwable throwable, Model mv, HttpServletResponse resp) {
         HttpStatus status = getStatus(request);
         String contentType = request.getContentType();
+            String uri = request.getRequestURI();
         /*针对需要对错误信息进行提示返回json数据*/
-        if("application/json;charset=UTF-8".equals(contentType)){
+        if("application/json;charset=UTF-8".equals(contentType)||uri.contains("/comment/")){
             ResultDTO resultDTO;
             if (throwable instanceof CustomizeException) {
              resultDTO =    ResultDTO.errOf((CustomizeException) throwable);
