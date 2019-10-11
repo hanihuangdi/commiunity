@@ -10,4 +10,6 @@ import java.util.List;
 public interface QuestionCustomMapper {
   void  update(Long id);
   void updateComment(Long id);
+
+  List<Question> findRelated(Question question);
 }

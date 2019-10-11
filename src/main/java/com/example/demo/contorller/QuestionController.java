@@ -32,12 +32,14 @@ public class QuestionController {
     public String question(@PathVariable(name="id")Long id, HttpServletRequest req, Model md){
         User user = new User();
         Question question = service.findbyid(id);
-        questionService.addView(id);
         QuestionDTO questionDTO = new QuestionDTO();
         if(question!=null){
+            questionService.addView(id);
+            List<Question> questions = questionService.findRelated(question);
             user = userMapper.selectByPrimaryKey(question.getCreator());
             questionDTO.setQuestion(question);
             questionDTO.setUser(user);
+            questionDTO.setQuestions(questions);
             md.addAttribute("questionDTO",questionDTO);
         }
         List<CommentDTO> commentDTOS = commentService.findByIdComment(id, CommentTypeEnum.QUSTION.getType());

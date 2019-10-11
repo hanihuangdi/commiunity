@@ -1,9 +1,11 @@
 package com.example.demo.contorller;
 
+import com.example.demo.cache.TagCache;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.model.Question;
 import com.example.demo.model.User;
 import com.example.demo.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,10 +29,12 @@ public class PublishController {
         md.addAttribute("description",question.getDescription());
         md.addAttribute("tag",question.getTag());
         md.addAttribute("id",question.getId());
+        md.addAttribute("tagDTOs", TagCache.get());
     return "publish";
     }
     @GetMapping("/publish")
-    public String publish(){
+    public String publish(Model md){
+        md.addAttribute("tagDTOs", TagCache.get());
         return "publish";
     }
     @PostMapping("/publish")
@@ -45,6 +49,7 @@ public class PublishController {
         md.addAttribute("description",description);
         md.addAttribute("tag",tag);
         md.addAttribute("id",id);
+        md.addAttribute("tagDTOs", TagCache.get());
 
         //登录验证
 
@@ -69,6 +74,11 @@ public class PublishController {
 //            md.addAttribute("msg","您尚未登录，请"+"登录后重试");
 //            return "publish";
 //        }
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            md.addAttribute("msg", "输入非法标签:" + invalid);
+            return "publish";
+        }
         if(cookies==null){
             md.addAttribute("msg","您尚未登录，请"+"登录后重试");
 //            return "publish";

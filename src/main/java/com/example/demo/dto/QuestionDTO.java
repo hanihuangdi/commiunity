@@ -9,4 +9,5 @@ import java.util.List;
 public class QuestionDTO {
     Question question;
     User user;
+    List<Question> questions;
 }

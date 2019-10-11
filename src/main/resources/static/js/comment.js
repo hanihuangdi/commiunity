@@ -85,7 +85,8 @@
                             $("<p/>",{"html":comment.content})).append(
                                 $("<span/>",{"class":"time_comment","html":moment(comment.gmtCreate).format('YYYY-MM-DD')}));
 
-                            var hr = $("<hr/>",{"class":"col-lg-12 col-md-12"});
+                            var hr = $("<hr/>",{"class":"col-lg-12 col-md-12",
+                                "width": "97%"});
                             comments.prepend(div);
                             div.append(img).append(spanName).append(divIner).append(hr);
 
@@ -98,5 +99,46 @@
                 }
 
             });
+        }
+    }
+
+    //标签提示展示
+    function selectTag(){
+        $("#questionTag").css("display","block");
+    }
+    function showTag() {
+        $("#tag").blur(0);
+    }
+    function hideTag(){
+        var objID =
+            setTimeout( function(){
+                $("#questionTag").hide();
+            }, 200);
+    }
+    $(function(){
+        $("#tag").focus(function () {
+            $("#questionTag").show();
+        });
+        var tag = document.getElementById("tag");
+        tag.onblur=hideTag;
+        $("#questionTag").mouseenter(function(){
+            tag.onblur=null;
+        });
+        $("#questionTag").mouseleave(function(){
+            $("#questionTag").hide();
+            tag.onblur=hideTag;
+        });
+
+    });
+//标签单机事件
+    function addTag(e){
+        var value = e.getAttribute("data-tag");
+        var tag = $("#tag").val();
+        if(tag.indexOf(value)==-1){
+            if(tag){
+                $("#tag").val(tag+","+value);
+            }else{
+            $("#tag").val(value);
+            }
         }
     }

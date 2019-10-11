@@ -76,8 +76,9 @@
                             </div><!-- /input-group -->
                         </div><!-- /.col-lg-6 -->
                     </div>
-                    <hr/>
+
             </div>
+                <hr class="col-lg-12 col-md-12"/>
             </div>
             <!--回复框-->
             <div class="col-lg-12 col-md-12">
@@ -90,12 +91,23 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-12">
+            <div class="col-lg-12 col-md-12">
             <h4>发起人</h4><br/>
             <a href="#">
                 <img class="media-object img_size img-circle" th:src="${questionDTO.user.avatarUrl}" alt="头像">
                 <span th:text="${questionDTO.user.name}"></span>
 
             </a>
+            </div>
+            <hr class="col-lg-12 col-md-12"/>
+            <div class="col-lg-12 col-md-12">
+                <h3>相关问题</h3>
+                <ul class="question-related">
+                    <li th:each="question:${questionDTO.questions}">
+                        <a th:text="${question.title}" th:href="@{'/question/'+ ${question.id}}"></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

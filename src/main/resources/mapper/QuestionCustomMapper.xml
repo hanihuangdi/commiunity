@@ -137,4 +137,11 @@
 
     where ID = #{id,jdbcType=INTEGER}
   </update>
+<!--/*select ID,TITLE,TAG from QUESTION where Tag REGEXP '二级回复|参数';*/-->
+  <select id="findRelated" parameterType="com.example.demo.model.Question" resultMap="BaseResultMap">
+    select
+    *
+    from QUESTION
+    where ID !=#{id} and tag REGEXP #{tag}
+  </select>
 </mapper>
