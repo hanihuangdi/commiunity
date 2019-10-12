@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class PageBean {
+public class PageBean<T> {
     int totalPage;
     int currentPage;
     int size;
@@ -16,6 +16,6 @@ public class PageBean {
     boolean lastPage;
     int count;
     List<Integer> list;
-    List<QuestionDTO> questionDTOs;
+    List<T> data;
 
 }

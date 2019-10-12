@@ -31,12 +31,12 @@ public class CommentController {
             return ResultDTO.errOf(CustomizeErroCode.COMMENT_NULL);
         }
         Comment comment = new Comment();
-        comment.setParentId(commentDTO.getParentId());
+        comment.setParentId(commentDTO.getParentId());//问题或者评论的ID
         comment.setContent(commentDTO.getContent());
         comment.setType(commentDTO.getType());
         comment.setGmtModified(System.currentTimeMillis());
         comment.setGmtCreate(System.currentTimeMillis());
-        comment.setCommentator(user.getId());
+        comment.setCommentator(user.getId());//答复者的ID
         comment.setCommentCount(0L);
         commentService.insert(comment);
         return ResultDTO.okOf();
