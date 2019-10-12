@@ -44,7 +44,7 @@ public class ProfileController {
         }
         if("data".equals(action)){
             md.addAttribute("action",action);
-            md.addAttribute("actionName","个人资料");
+            md.addAttribute("actionName","我的通知");
         }
         return "profile";
     }
