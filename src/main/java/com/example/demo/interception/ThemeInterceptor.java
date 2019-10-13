@@ -2,9 +2,11 @@ package com.example.demo.interception;
 
 
 
+import com.example.demo.mapper.NotificationMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.User;
 import com.example.demo.model.UserExample;
+import com.example.demo.service.NotifiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,6 +21,8 @@ import java.util.List;
 public class ThemeInterceptor implements HandlerInterceptor {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    NotifiService notifiService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -32,6 +36,8 @@ public class ThemeInterceptor implements HandlerInterceptor {
             List<User> users = userMapper.selectByExample(example);
             if(users.get(0)!=null){
                request.getSession().setAttribute("user",users.get(0));
+              Long count =  notifiService.unreadCount(users.get(0).getId());
+              request.getSession().setAttribute("notificationCount",count);
               }
             break;
            }

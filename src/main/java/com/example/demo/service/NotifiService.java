@@ -2,7 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.dto.NotifiDTO;
 import com.example.demo.dto.PageBean;
+import com.example.demo.enmus.NotifiStatusEnum;
 import com.example.demo.enmus.NotifiTypeEnum;
+import com.example.demo.exception.CustomizeErroCode;
+import com.example.demo.exception.CustomizeException;
 import com.example.demo.mapper.NotificationMapper;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
@@ -10,6 +13,7 @@ import com.example.demo.model.Notification;
 import com.example.demo.model.NotificationExample;
 import com.example.demo.model.User;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +36,7 @@ public class NotifiService {
         int star;
         int starPage=0;
         int endPage=0;
+        int count;
         pageBean.setCurrentPage(currentPage);
         pageBean.setSize(size);
         // star=(currentPage-1)*size;
@@ -46,15 +51,18 @@ public class NotifiService {
 
         }
         else {
-            NotificationExample example = new NotificationExample();
-            example.createCriteria().andReceiverEqualTo(creator);
-            account=(int) notificationMapper.countByExample(example);
-            notifications =   notificationMapper.selectByExampleWithRowbounds(example,new RowBounds(account-size*currentPage,size));
+
+            NotificationExample example1 = new NotificationExample();
+            account=(int) notificationMapper.countByExample(example1);
+            notifications =   notificationMapper.selectByExampleWithRowbounds(example1,new RowBounds(account-size*currentPage,size));
 
         }
+        NotificationExample example = new NotificationExample();
+        example.createCriteria().andReceiverEqualTo(creator).andStatusEqualTo(NotifiStatusEnum.UNREAD.getStatus());
+        count=(int) notificationMapper.countByExample(example);
         //颠倒数组
         Collections.reverse(notifications);
-        pageBean.setCount(account);
+        pageBean.setCount(count);
         totalPage=account%size==0?account/size:(account/size)+1;
         //防止越界
         if(currentPage>totalPage){
@@ -147,5 +155,25 @@ public class NotifiService {
     }
 
     public NotifiDTO read(Long id, User user) {
+        NotifiDTO notifiDTO = new NotifiDTO();
+       Notification notify = notificationMapper.selectByPrimaryKey(id);
+        if (notify==null){
+            throw new CustomizeException(CustomizeErroCode.NOTIFICATION_NO_FOUND);
+        }
+        if (notify.getReceiver()!=user.getId()){
+         throw  new CustomizeException(CustomizeErroCode.NOTIFICATION_FAILD);
+        }
+        notify.setStatus(NotifiStatusEnum.READ.getStatus());
+       notificationMapper.updateByPrimaryKeySelective(notify);
+        BeanUtils.copyProperties(notify,notifiDTO);
+        notifiDTO.setTypeName(NotifiTypeEnum.nameOfType(notify.getType()));
+        return notifiDTO;
+    }
+    public Long unreadCount(Long userId) {
+        NotificationExample notificationExample = new NotificationExample();
+        notificationExample.createCriteria()
+                .andReceiverEqualTo(userId)
+                .andStatusEqualTo(NotifiStatusEnum.UNREAD.getStatus());
+        return notificationMapper.countByExample(notificationExample);
     }
 }

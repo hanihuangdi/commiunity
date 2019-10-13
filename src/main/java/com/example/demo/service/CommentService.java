@@ -105,14 +105,15 @@ public class CommentService {
         notification.setStatus(NotifiStatusEnum.UNREAD.getStatus());
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setNotifier(comment.getCommentator());//回复的ID
-        notification.setOuterid(comment.getParentId());//问题或评论的ID
         if(notification.getType()==2){
             Comment comment1 =commentMapper.selectByPrimaryKey(comment.getParentId());
             notification.setReceiver(comment1.getCommentator());//提问或者评论的者的ID
             notification.setOuterTitle(comment1.getContent());//缓存设计回复的标题
             User user = userMapper.selectByPrimaryKey(comment1.getCommentator());
             notification.setNotifierName(user.getName());//缓存设计发起通知的名称
+            notification.setOuterid(comment1.getParentId());//问题或评论的ID
         }else{
+            notification.setOuterid(comment.getParentId());//问题或评论的ID
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             notification.setReceiver(question.getCreator());
             notification.setOuterTitle(question.getTitle());

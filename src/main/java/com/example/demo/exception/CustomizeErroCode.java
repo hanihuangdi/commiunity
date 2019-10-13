@@ -9,7 +9,9 @@ public enum CustomizeErroCode implements ICustomizeErrorCode {
     TAGET_PRAME_ERROR(205,"评论类型错误"),
     COMMENT_NOT_FIND(206,"您回复的评论不存在，换一个试试"),
     COMMENT_NULL(207,"输入的内容不能为空"),
-    COMMENT_FOUND(208,"当前评论为空")
+    COMMENT_FOUND(208,"当前评论为空"),
+    NOTIFICATION_NO_FOUND(209,"您当前的通知不存在，换一个试试"),
+    NOTIFICATION_FAILD(210,"您这是访问了别人的连接吧")
     ;
 
 

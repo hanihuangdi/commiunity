@@ -22,8 +22,8 @@ public class NotifcationController {
                 return "redirect:/";
             }
           NotifiDTO notifiDTO =  notifiService.read(id,user);
-        if (NotifiTypeEnum.COMMENTTYPE.getTypeName() == notifiDTO.getTypeName()
-                || NotifiTypeEnum.QUESTIONTYPE.getTypeName() == notifiDTO.getTypeName()) {
+        if (NotifiTypeEnum.COMMENTTYPE.getTypeNum() == notifiDTO.getType()
+                || NotifiTypeEnum.QUESTIONTYPE.getTypeNum() == notifiDTO.getType()) {
             return "redirect:/question/" + notifiDTO.getOuterid();
         } else {
             return "redirect:/";
