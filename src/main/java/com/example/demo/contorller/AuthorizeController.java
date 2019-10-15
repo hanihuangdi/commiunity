@@ -5,6 +5,7 @@ import com.example.demo.dto.GithubUser;
 import com.example.demo.model.User;
 import com.example.demo.provider.GithubProvider;
 import com.example.demo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -17,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.UUID;
-
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     GithubProvider gp;
@@ -54,7 +55,10 @@ public class AuthorizeController {
             resp.addCookie(cookie);
             //req.getSession().setAttribute("githubUser",githubUser);
             return "redirect:/";
+        }else{
+            log.debug("callback get github error,{}",githubUser);
+            return "redirect:/";
         }
-        return "redirect:/";
+
     }
 }

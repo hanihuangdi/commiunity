@@ -2,14 +2,17 @@ package com.example.demo.service;
 
 import com.example.demo.dto.NotifiDTO;
 import com.example.demo.dto.PageBean;
+import com.example.demo.dto.PageDTO;
 import com.example.demo.dto.QuestionDTO;
 import com.example.demo.enmus.NotifiTypeEnum;
 import com.example.demo.exception.CustomizeErroCode;
 import com.example.demo.exception.CustomizeException;
 import com.example.demo.mapper.NotificationMapper;
+import com.example.demo.mapper.QuestionCustomMapper;
 import com.example.demo.mapper.QuestionMapper;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.model.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +29,13 @@ public class PageService {
     UserMapper userMapper;
     @Autowired
     NotificationMapper notificationMapper;
-    public PageBean findPage(int currentPage, int size, Long creator) {
+    @Autowired
+    QuestionCustomMapper customMapper;
+    public PageBean findPage(int currentPage, int size, Long creator,String search) {
+        if(StringUtils.isNotBlank(search)){
+            String[] search1 = search.split(" ");
+            String newSearch  = StringUtils.join(search1,"|");
+        }
 
         PageBean pageBean = new PageBean();
         int account;
@@ -34,27 +43,30 @@ public class PageService {
         int star;
         int starPage=0;
         int endPage=0;
+        star=(currentPage-1)*size;
         pageBean.setCurrentPage(currentPage);
         pageBean.setSize(size);
-      // star=(currentPage-1)*size;
+        PageDTO pageDTO = new PageDTO();
+        pageDTO.setCurrentPage(star);
+        pageDTO.setSearch(search);
+        pageDTO.setSize(size);
         List<Question> questions;
-
         User user=null;
         List<QuestionDTO> questionDTOList=new ArrayList<QuestionDTO>();
         if(creator==null){
-            account= (int) questionMapper.countByExample(new QuestionExample());
-         questions =   questionMapper.selectByExampleWithRowbounds(new QuestionExample(),new RowBounds(account-size*currentPage,size));
+
+            account=  customMapper.countBySearch(pageDTO);
+            questions =   customMapper.selectBySearchWithRowbounds(pageDTO);
 
         }
         else {
             QuestionExample example = new QuestionExample();
             example.createCriteria().andCreatorEqualTo(creator);
+            example.setOrderByClause("gmt_create desc");
             account=(int) questionMapper.countByExample(example);
-            questions =   questionMapper.selectByExampleWithRowbounds(example,new RowBounds(account-size*currentPage,size));
+            questions =   questionMapper.selectByExampleWithRowbounds(example,new RowBounds(star,size));
 
         }
-        //颠倒数组
-        Collections.reverse(questions);
         pageBean.setCount(account);
         totalPage=account%size==0?account/size:(account/size)+1;
         //防止越界
@@ -141,7 +153,7 @@ public class PageService {
         return pageBean;
     }
     public PageBean findPage(int currentPage, int size) {
-      return   findPage(currentPage,size,null);
+      return   findPage(currentPage,size,null,null);
 
     }
 

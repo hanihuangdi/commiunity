@@ -144,4 +144,26 @@
     from QUESTION
     where ID !=#{id} and tag REGEXP #{tag}
   </select>
+  <select id="countBySearch" parameterType="com.example.demo.dto.PageDTO" resultType="java.lang.Integer">
+    select
+    count(*)
+    from QUESTION
+    <where>
+      <if test="search != null and search != ''">
+       and TITLE REGEXP #{search}
+      </if>
+    </where>
+  </select>
+  <!--分页条件查询-->
+  <select id="selectBySearchWithRowbounds" parameterType="com.example.demo.dto.PageDTO" resultMap="BaseResultMap">
+    select
+    *
+    from QUESTION
+    <where>
+      <if test="search != null and search != ''">
+        and TITLE REGEXP #{search}
+      </if>
+    </where>
+    order by gmt_create  desc  limit #{currentPage},#{size}
+  </select>
 </mapper>

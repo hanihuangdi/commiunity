@@ -22,7 +22,8 @@ public class Hello {
     }
     @GetMapping("/")
     public String index(HttpServletRequest req,Model md,@RequestParam(name="currentPage",defaultValue = "1")int currentPage,
-                        @RequestParam(name="size",defaultValue ="5")int size){
+                        @RequestParam(name="size",defaultValue ="5")int size,
+                        @RequestParam(name="search",required=false) String search){
 //        Cookie[] cookies = req.getCookies();
 //        if(cookies!=null){
 //        for(Cookie ele:cookies){
@@ -37,7 +38,8 @@ public class Hello {
 //        }
 //        }
         PageBean pageBean;
-        pageBean = service.findPage(currentPage,size);
+        pageBean = service.findPage(currentPage,size,null,search);
+        req.getSession().setAttribute("search",search);
         md.addAttribute("pageBean",pageBean);
         return "index";
 

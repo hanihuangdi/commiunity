@@ -99,7 +99,8 @@
             <div class="col-lg-12 col-md-12">
 
                 <input id="questionId" type="hidden" th:value="${questionDTO.question.id}">
-                <img class="media-object img_size img_comment" th:src="${questionDTO.user.avatarUrl}"/><span th:text="${questionDTO.user.name}"></span>
+                <img class="media-object img_size img_comment" th:src="${session.user!=null?questionDTO.user.avatarUrl:'/images/用户.png'}"/>
+                <span th:text="${session.user!=null?questionDTO.user.name:'未登录'}"></span>
                 <textarea class="form-control" rows="3" id="comment_content"></textarea>
                 <button type="button" class="btn btn-success btn_comment" id="comment" style="display: none;" onclick="showTextarea()">回复</button>
                 <button type="button" class="btn btn-success btn_comment" onclick="post_comment()" id="submit">提交</button>
@@ -126,5 +127,7 @@
         </div>
     </div>
 </div>
+<!--页脚-->
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>
