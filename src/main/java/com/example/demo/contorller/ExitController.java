@@ -19,5 +19,7 @@ public class ExitController {
         cookie.setPath("/");
         resp.addCookie(cookie);
         return "redirect:/";
+
     }
+
 }

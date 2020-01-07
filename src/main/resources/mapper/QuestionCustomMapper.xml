@@ -152,6 +152,9 @@
       <if test="search != null and search != ''">
        and TITLE REGEXP #{search}
       </if>
+      <if test="tagName != null and tagName != ''">
+        and TAG REGEXP #{tagName}
+      </if>
     </where>
   </select>
   <!--分页条件查询-->
@@ -163,6 +166,10 @@
       <if test="search != null and search != ''">
         and TITLE REGEXP #{search}
       </if>
+      <if test="tagName != null and tagName != ''">
+        and TAG REGEXP #{tagName}
+      </if>
+
     </where>
     order by gmt_create  desc  limit #{currentPage},#{size}
   </select>

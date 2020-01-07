@@ -24,7 +24,7 @@ public class CustomizeExceptionHandler {
         HttpStatus status = getStatus(request);
         String contentType = request.getContentType();
             String uri = request.getRequestURI();
-        /*针对需要对错误信息进行提示返回json数据*/
+        /*针对需要对错误信息进行提示的异常，返回json数据*/
         if("application/json;charset=UTF-8".equals(contentType)||uri.contains("/comment/")){
             ResultDTO resultDTO;
             if (throwable instanceof CustomizeException) {

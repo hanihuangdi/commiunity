@@ -7,4 +7,5 @@ public class PageDTO {
     private String search;
     private int size;
     private int currentPage;
+    private  String tagName;
 }

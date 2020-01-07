@@ -25,7 +25,7 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12">
-            <h2><div class="glyphicon glyphicon-th-list"></div><span>发现</span></h2>
+            <h2><div class="glyphicon glyphicon-flag"></div><span>沿途分享</span></h2>
             <hr/>
             <div class="media" th:each="questionDto:${pageBean.data}">
                 <div class="media-left">
@@ -45,21 +45,28 @@
             <!--分页-->
             <nav aria-label="Page navigation">
                 <ul class="pagination" >
-                    <li class="pagination" th:if="${pageBean.fistPage}"><a th:href="@{/(currentPage=1,search=${session.search})}">首页</a></li>
-                    <li class="pagination" th:if="${pageBean.fistPage}"><a th:href="@{/(currentPage=${pageBean.currentPage}-1,search=${session.search})}">上一页</a></li>
+                    <li class="pagination" th:if="${pageBean.fistPage}"><a th:href="@{/(currentPage=1,search=${session.search},hotPage=${session.hotTag})}">首页</a></li>
+                    <li class="pagination" th:if="${pageBean.fistPage}"><a th:href="@{/(currentPage=${pageBean.currentPage}-1,search=${session.search},hotPage=${session.hotTag})}">上一页</a></li>
                     <li th:each="list:${pageBean.list}" th:class="${pageBean.currentPage==list}?'active':''">
-                        <a th:href="@{/(currentPage=${list},search=${session.search})}" th:text="${list}" ></a>
+                        <a th:href="@{/(currentPage=${list},search=${session.search},hotPage=${session.hotTag})}" th:text="${list}" ></a>
                     </li>
-                    <li class="pagination" th:if="${pageBean.lastPage}"><a th:href="@{/(currentPage=${pageBean.currentPage}+1,search=${session.search})}">下一页</a></li>
-                    <li class="pagination" th:if="${pageBean.lastPage}"><a th:href="@{/(currentPage=${pageBean.totalPage},search=${session.search})}">尾页</a></li>
+                    <li class="pagination" th:if="${pageBean.lastPage}"><a th:href="@{/(currentPage=${pageBean.currentPage}+1,search=${session.search},hotPage=${session.hotTag})}">下一页</a></li>
+                    <li class="pagination" th:if="${pageBean.lastPage}"><a th:href="@{/(currentPage=${pageBean.totalPage},search=${session.search},hotPage=${session.hotTag})}">尾页</a></li>
                 </ul>
             </nav>
 
         </div>
         <div class="col-lg-3 col-md-12">
             <h3>热门话题</h3>
-            话题一：<br/>
-            话题二：<br/>
+            <p th:each="hotTags,hotTagStar:${hotTag}" th:if="${hotTagStar.count<=10}"  >
+
+                <span class="label label-info momment_tag">
+                        <span class="glyphicon glyphicon-volume-up"></span>
+                        <span class="label label-info" id="hostTag">
+                             <a th:href="@{/(hotTag=${hotTags.getKey()})}" th:text="${hotTags.getKey()}"></a>
+                        </span>
+                    </span>
+            </p>
         </div>
     </div>
 </div>

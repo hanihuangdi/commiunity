@@ -31,12 +31,16 @@ public class PageService {
     NotificationMapper notificationMapper;
     @Autowired
     QuestionCustomMapper customMapper;
-    public PageBean findPage(int currentPage, int size, Long creator,String search) {
+    public PageBean findPage(int currentPage, int size, Long creator,String search,String tagName) {
+        PageDTO pageDTO = new PageDTO();
         if(StringUtils.isNotBlank(search)){
-            String[] search1 = search.split(" ");
-            String newSearch  = StringUtils.join(search1,"|");
+            //String[] search1 = search.split(" ");
+           // String newSearch  = StringUtils.join(search1,"|");
+            pageDTO.setSearch(search);
         }
-
+        if(StringUtils.isNotBlank(tagName)){
+            pageDTO.setTagName(tagName);
+        }
         PageBean pageBean = new PageBean();
         int account;
         int totalPage;
@@ -46,9 +50,7 @@ public class PageService {
         star=(currentPage-1)*size;
         pageBean.setCurrentPage(currentPage);
         pageBean.setSize(size);
-        PageDTO pageDTO = new PageDTO();
         pageDTO.setCurrentPage(star);
-        pageDTO.setSearch(search);
         pageDTO.setSize(size);
         List<Question> questions;
         User user=null;
@@ -151,10 +153,6 @@ public class PageService {
        }
        pageBean.setList(list);
         return pageBean;
-    }
-    public PageBean findPage(int currentPage, int size) {
-      return   findPage(currentPage,size,null,null);
-
     }
 
     public Question findbyid(Long id) {

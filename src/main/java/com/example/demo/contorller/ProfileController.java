@@ -42,7 +42,7 @@ public class ProfileController {
             md.addAttribute("action",action);
             md.addAttribute("actionName","我的提问");
             PageBean pageBean;
-            pageBean = service.findPage(currentPage,size,user.getId(),null);
+            pageBean = service.findPage(currentPage,size,user.getId(),null,null);
             md.addAttribute("pageBean",pageBean);
 
         }
